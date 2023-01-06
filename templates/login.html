@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <style>
+      /* Add some styling to the page */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .form-container {
+        width: 400px;
+      }
+      .form-container h1 {
+        margin-bottom: 20px;
+      }
+      .form-container form {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-container form label {
+        margin-bottom: 5px;
+      }
+      .form-container form input[type="text"],
+      .form-container form input[type="password"] {
+        height: 25px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 0 10px;
+      }
+      .form-container form input[type="submit"] {
+        height: 30px;
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        {% if error %}
+        <p style="color: red">{{ error }}</p>
+        {% endif %}
+        <h1>Login</h1>
+        <form method="post" action="/login">
+          <label for="username">Username:</label><br>
+          <input type="text" id="username" name="username"><br>
+          <label for="password">Password:</label><br>
+          <input type="password" id="password" name="password"><br><br>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

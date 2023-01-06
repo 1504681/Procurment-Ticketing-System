@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tickets</title>
+    <style>
+      /* Add some styling to the page */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100vh;
+        margin: 0 auto;
+        max-width: 800px;
+      }
+      .form-container {
+        width: 400px;
+        margin-right: 20px;
+      }
+      .form-container h1 {
+        margin-bottom: 20px;
+      }
+      .form-container form {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-container form label {
+        margin-bottom: 5px;
+      }
+      .form-container form input[type="text"] {
+        height: 25px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 0 10px;
+      }
+      .form-container form input[type="submit"] {
+        height: 30px;
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        font-size: 16px;
+      }
+      .tickets-container {
+        width: 400px;
+        margin-left: 20px;
+      }
+      .tickets-container h2 {
+        margin-bottom: 20px;
+      }
+      .tickets-container table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .tickets-container table th,
+      .tickets-container table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+      .tickets-container table th {
+        background-color: #ddd;
+      }
+      /* Add some specific styling for completed status text */
+      .tickets-container table td.Completed {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        {% if error %}
+        <p style="color:red">{{ error }}</p>
+        {% endif %}
+        <h1>Create a Ticket</h1>
+        <form method="post">
+          <label for="requested_item">Requested Item:</label><br>
+          <input type="text" id="requested_item" name="requested_item"><br>
+          <label for="department">Department:</label><br>
+          <input type="text" id="department" name="department"><br>
+          <label for="project">Project:</label><br>
+          <input type="text" id="project" name="project"><br>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+      <div class="tickets-container">
+        <h2>Ticket List</h2>
+        <!-- Add the button to the HTML page -->
+<button id="export-button">Export to Excel</button>
+
+<!-- Include the jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Add the JavaScript to send the AJAX request when the button is clicked -->
+<script>
+  $('#export-button').click(function() {
+    $.ajax({
+      url: '/export-to-excel',
+      method: 'GET',
+      success: function(data) {
+        console.log('Excel file downloaded');
+      },
+      error: function(error) {
+        console.error(error);
+      }
+    });
+  });
+</script>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Identifier</th>
+            <th>Requested Item</th>
+            <th>Department</th>
+            <th>Project</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+          {% for ticket in tickets %}
+          <tr title="{{ ticket.notes }}" style="cursor:pointer;">
+            <td>{{ ticket.id }}</td>
+            <td><a href="#" onclick="copyToClipboard('{{ ticket.identifier }}')">{{ ticket.identifier }}</a></td>
+            <td>{{ ticket.requested_item }}</td>
+            <td>{{ ticket.department }}</td>
+            <td>{{ ticket.project }}</td>
+            <td>{% if ticket.status == 'Completed' %}<span style="color: green">{{ ticket.status }}</span>{% else %}{{ ticket.status }}{% endif %}</td>
+            <td>
+              <a href="{{ url_for('edit_ticket', ticket_id=ticket.id) }}">Edit</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <script>
+        function copyToClipboard(text) {
+          navigator.clipboard.writeText(text).then(function() {
+          console.log('Async: Copying to clipboard was successful!');
+          }, function(err) {
+          console.error('Async: Could not copy text: ', err);
+          });
+          var message = document.createElement("div");
+          message.innerHTML = "Copied to clipboard!";
+          message.style.cssText = "position: fixed; top: 10px; left: 10px; padding: 10px; background-color: green; color: white;";
+          document.body.appendChild(message);
+  
+          // Remove the element after 2 seconds
+          setTimeout(function() {
+            document.body.removeChild(message);
+          }, 2000);
+      }
+      </script>
+    </div>
+  </body>
+</html>

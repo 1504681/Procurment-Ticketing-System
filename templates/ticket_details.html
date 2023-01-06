@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: sans-serif;
+        }
+        h1 {
+          text-align: center;
+        }
+        table {
+          width: 80%;
+          margin: 20px auto;
+          border-collapse: collapse;
+        }
+        th, td {
+          border: 1px solid #dddddd;
+          padding: 8px;
+        }
+        th {
+          text-align: left;
+        }
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+      </style>
+    <title>Ticket Details</title>
+  </head>
+  <body>
+    <h1>Ticket Details</h1>
+    <table>
+      <tr>
+        <th>Identifier</th>
+        <td>{{ ticket.identifier }}</td>
+      </tr>
+      <tr>
+        <th>Requested Item</th>
+        <td>{{ ticket.requested_item }}</td>
+      </tr>
+      <tr>
+        <th>Department</th>
+        <td>{{ ticket.department }}</td>
+      </tr>
+      <tr>
+        <th>Project</th>
+        <td>{{ ticket.project }}</td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td>{{ ticket.status }}</td>
+      </tr>
+    </table>
+  </body>
+</html>

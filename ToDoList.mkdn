@@ -1,0 +1,22 @@
+To-do list:
+
+
+- Editable notes for each ticket [Completed]
+
+- Add a history of all changes to ticket (include Ticket Created: [info] in history for clarity) [Completed]
+
+
+- Generate unique ticket id and copy to clipboard on clicked [Completed]
+
+- add ability to search on homepage for specific ticket information/status without login (Homepage button: Check Ticket (TICKET50193 etc)) [Completed]
+
+- Add ability to archive tickets (Completed, Cancelled), with an archive page to check archived tickets
+
+
+- Option to filter all tickets alphabetically by Item name, Department, or Project
+
+- Have some nice way of grouping items in same project/Department (Export by project/department)
+
+- Item name can be clicked to expand to see more information/options
+
+

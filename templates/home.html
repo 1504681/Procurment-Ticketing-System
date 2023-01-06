@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+    <style>
+      /* Add some styling to the page */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .welcome-message {
+        text-align: center;
+      }
+      .welcome-message h1 {
+        margin-bottom: 20px;
+      }
+      .welcome-message p {
+        margin-bottom: 20px;
+      }
+      .welcome-message button {
+        height: 30px;
+        width: 100px;
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="welcome-message">
+        <h1>Welcome to the Ticket Tracker!</h1>
+        <p>Use the navigation menu to log in and create tickets.</p>
+        <a href="{{ url_for('login') }}"><button>Log in</button></a>
+      </div>
+    </div>
+    <div class="container">
+      <form onsubmit="searchForTicket(); return false;">
+        <label for="identifier">Ticket Search (by Identifier):</label><br>
+        <input type="text" id="identifier"><br>
+        <input type="submit" value="Search">
+      </form>
+      <div id="search-results-container"></div>
+    </div>    
+  <script>
+    function searchForTicket() {
+  // Get the identifier from the input field
+  var identifier = document.getElementById('identifier').value;
+
+  // Send a request to the server to search for the ticket
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/search_ticket');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      // Redirect to the ticket details page
+      var result = JSON.parse(xhr.responseText);
+      if (result.length > 0) {
+        // A result was found, so redirect to the ticket details page
+        window.location.href = '/ticket_details?identifier=' + identifier;
+      } else {
+        // No result was found, so display a message
+        displaySearchResults(result);
+      }
+    }
+  };
+  xhr.send(JSON.stringify({ 'identifier': identifier }));
+}
+
+  function displaySearchResults(results) {
+  // Clear any existing search results
+  var searchResultsContainer = document.getElementById('search-results-container');
+  searchResultsContainer.innerHTML = '';
+
+  // Check if there are any results to display
+  if (results.length === 0) {
+    // No results were found
+    searchResultsContainer.innerHTML = '<p>No results found</p>';
+  } else {
+    // Results were found, so display them in a table
+    // Create a table to hold the results
+    var resultsTable = document.createElement('table');
+
+    // Add a table row for each result
+    results.forEach(function(result) {
+      var row = document.createElement('tr');
+      var identifierCell = document.createElement('td');
+      identifierCell.textContent = result.identifier;
+      row.appendChild(identifierCell);
+      
+      // Add cells for the other data fields
+      var requestedItemCell = document.createElement('td');
+      requestedItemCell.textContent = result.requested_item;
+      row.appendChild(requestedItemCell);
+      
+      var departmentCell = document.createElement('td');
+      departmentCell.textContent = result.department;
+      row.appendChild(departmentCell);
+      
+      var projectCell = document.createElement('td');
+      projectCell.textContent = result.project;
+      row.appendChild(projectCell);
+      
+      var statusCell = document.createElement('td');
+      statusCell.textContent = result.status;
+      row.appendChild(statusCell);
+      
+      // Append the row to the table
+      resultsTable.appendChild(row);
+    });
+
+    // Append the table to the searchResultsContainer element
+    searchResultsContainer.appendChild(resultsTable);
+  }
+}
+  </script>
+</body>
+
+</html>

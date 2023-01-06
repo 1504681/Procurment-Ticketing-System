@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Ticket</title>
+    <style>
+      /* Add some styling to the page */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0 auto;
+        max-width: 800px;
+      }
+      .form-container {
+        width: 800px;
+        margin-bottom: 20px;
+      }
+      .form-container h1 {
+        margin-bottom: 20px;
+      }
+      .form-container form {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-container form label {
+        margin-bottom: 5px;
+      }
+      .form-container form input[type="text"],
+      .form-container form textarea {
+        height: 25px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 0 10px;
+      }
+      .form-container form input[type="submit"] {
+        height: 30px;
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        font-size: 16px;
+      }
+      .change-log-container {
+        width: 800px;
+      }
+      .change-log-container h2 {
+        margin-bottom: 20px;
+      }
+      .change-log-container table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .change-log-container table th,
+      .change-log-container table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+      .change-log-container table th {
+        background-color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        <h1>Edit Ticket</h1>
+        <p>Ticket ID: {{ ticket['id'] }}</p>
+        <form method="post" action="{{ url_for('edit_ticket', ticket_id=ticket['id']) }}">
+          <label for="requested_item">Requested Item:</label>
+          <input type="text" id="requested_item" name="requested_item" value="{{ ticket['requested_item'] }}">
+          <label for="department">Department:</label>
+          <input type="text" id="department" name="department" value="{{ ticket['department'] }}">
+          <label for="project">Project:</label>
+          <input type="text" id="project" name="project" value="{{ ticket['project'] }}">
+          <label for="status">Status:</label>
+          <input type="text" id="status" name="status" value="{{ ticket['status'] }}">
+          <label for="notes">Notes:</label>
+          <textarea id="notes" name="notes">{{ ticket['notes'] }}</textarea>
+          <input type="submit" value="Save Changes">
+        </form>
+        <div class="change-log">
+          <h2>Edit History:</h2>
+          {% for change in ticket['change_log'] %}
+          <p>
+            <strong>{{ change['timestamp'] }}:</strong> {{ change['user'] }} changed {{ change['field'] }} from "{{ change['old_value'] }}" to "{{ change['new_value'] }}".
+          </p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
